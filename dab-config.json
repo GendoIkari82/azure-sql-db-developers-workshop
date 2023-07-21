@@ -1,0 +1,86 @@
+{
+  "$schema": "https://github.com/Azure/data-api-builder/releases/download/v0.7.6/dab.draft.schema.json",
+  "data-source": {
+    "database-type": "mssql",
+    "options": {
+      "set-session-context": false
+    },
+    "connection-string": "Server=localhost;Database=devDB;User ID=vscode;Password=4Jqk98$P%w$8JKZ7%@19kmD9%GC0$FdYlT$HToK6&F$*O#R9O4;TrustServerCertificate=true"
+  },
+  "runtime": {
+    "rest": {
+      "enabled": true,
+      "path": "/api"
+    },
+    "graphql": {
+      "allow-introspection": true,
+      "enabled": true,
+      "path": "/graphql"
+    },
+    "host": {
+      "mode": "development",
+      "cors": {
+        "origins": [],
+        "allow-credentials": false
+      },
+      "authentication": {
+        "provider": "StaticWebApps"
+      }
+    }
+  },
+  "entities": {
+    "person": {
+      "source": "dbo.person",
+      "permissions": [
+        {
+          "role": "anonymous",
+          "actions": [
+            "*"
+          ]
+        }
+      ],
+      "relationships": {
+        "address": {
+          "cardinality": "many",
+          "target.entity": "address"
+        }
+      }
+    },
+    "address": {
+      "source": "dbo.address",
+      "permissions": [
+        {
+          "role": "anonymous",
+          "actions": [
+            "*"
+          ]
+        }
+      ]
+    },
+    "getPersonByPet": {
+      "source": {
+        "type": "stored-procedure",
+        "object": "dbo.get_person_by_pet",
+        "parameters": {
+          "pet": ""
+        }
+      },
+      "permissions": [
+        {
+          "role": "anonymous",
+          "actions": [
+            "execute"
+          ]
+        }
+      ],
+      "rest": {
+        "methods": [
+          "get"
+        ]
+      },
+      "graphql": {
+        "operation": "query"
+      }
+    }
+  }
+}
